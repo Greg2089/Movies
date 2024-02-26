@@ -41,10 +41,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MainActivity", "onCreateViewHolder");
-        View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.movie_item,
-                parent,
-                false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false);
         return new MovieViewHolder(view);
     }
 
@@ -52,9 +49,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Log.d("MainActivity", "onBindViewHolder " + position);
         Movie movie = movies.get(position);
-        Glide.with(holder.itemView)
-                .load(movie.getPoster().getUrl())
-                .into(holder.imageViewPoster);
+        Glide.with(holder.itemView).load(movie.getPoster().getUrl()).into(holder.imageViewPoster);
         double rating = movie.getRating().getKp();
         int backgroundId;
         if (rating > 7) {
