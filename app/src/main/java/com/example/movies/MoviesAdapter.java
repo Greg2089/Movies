@@ -1,6 +1,7 @@
 package com.example.movies;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,11 @@ import java.util.Locale;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
     private List<Movie> movies = new ArrayList<>();
+    private onReachEndListener onReachEndListener;
+
+    public void setOnReachEndListener(MoviesAdapter.onReachEndListener onReachEndListener) {
+        this.onReachEndListener = onReachEndListener;
+    }
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
@@ -28,6 +34,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("MainActivity", "onCreateViewHolder");
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.movie_item,
                 parent,
@@ -37,12 +44,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+        Log.d("MainActivity", "onBindViewHolder " + position);
         Movie movie = movies.get(position);
         Glide.with(holder.itemView)
                 .load(movie.getPoster().getUrl())
                 .into(holder.imageViewPoster);
         double rating = movie.getRating().getKp();
-        holder.textViewRating.setText(String.format(Locale.ENGLISH, "%.1f", rating));
         int backgroundId;
         if (rating > 7) {
             backgroundId = R.drawable.circle_green;
@@ -53,12 +60,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
         Drawable background = ContextCompat.getDrawable(holder.itemView.getContext(), backgroundId);
         holder.textViewRating.setBackground(background);
+        holder.textViewRating.setText(String.format(Locale.ENGLISH, "%.1f", rating));
+
+        if (position >= movies.size() - 10 && onReachEndListener != null) {
+            onReachEndListener.onReachEnd();
+        }
 
     }
 
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    interface onReachEndListener {
+        void onReachEnd();
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
