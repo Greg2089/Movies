@@ -28,6 +28,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        loadMovies();
     }
 
     public LiveData<List<Movie>> getMovies() {

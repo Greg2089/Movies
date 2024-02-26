@@ -1,5 +1,6 @@
 package com.example.movies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
                 moviesAdapter.setMovies(movies);
             }
         });
-        viewModel.loadMovies();
         viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLoading) {
@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        moviesAdapter.setOnMovieClickListener(new MoviesAdapter.onMovieClickListener() {
+            @Override
+            public void onMovieClick(Movie movie) {
+                Intent intent = MovieDetailActivity.newIntent(MainActivity.this, movie);
+                startActivity(intent);
+            }
+        });
     }
 }

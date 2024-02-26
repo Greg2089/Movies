@@ -21,14 +21,20 @@ import java.util.Locale;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
     private List<Movie> movies = new ArrayList<>();
     private onReachEndListener onReachEndListener;
+    private onMovieClickListener onMovieClickListener;
+
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
+    }
 
     public void setOnReachEndListener(MoviesAdapter.onReachEndListener onReachEndListener) {
         this.onReachEndListener = onReachEndListener;
     }
 
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-        notifyDataSetChanged();
+    public void setOnMovieClickListener(MoviesAdapter.onMovieClickListener onMovieClickListener) {
+        this.onMovieClickListener = onMovieClickListener;
     }
 
     @NonNull
@@ -65,6 +71,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (position >= movies.size() - 10 && onReachEndListener != null) {
             onReachEndListener.onReachEnd();
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onMovieClickListener != null) {
+                    onMovieClickListener.onMovieClick(movie);
+                }
+            }
+        });
 
     }
 
@@ -75,6 +89,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     interface onReachEndListener {
         void onReachEnd();
+    }
+
+    interface onMovieClickListener {
+        void onMovieClick(Movie movie);
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
