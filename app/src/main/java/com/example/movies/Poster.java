@@ -1,11 +1,13 @@
 package com.example.movies;
 
+import androidx.room.Embedded;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class Poster implements Serializable {
-   @SerializedName("url")
+    @SerializedName("url")
     private String url;
 
     public Poster(String url) {
